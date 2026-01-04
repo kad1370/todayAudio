@@ -11,7 +11,10 @@
 <div id="list"></div>
 <script>
   if ('serviceWorker' in navigator) {
+    alert("?");
     navigator.serviceWorker.register('/service-worker.js');
+  } else{
+    alert("!");
   }
 </script>
 <script src="app.js"></script>
