@@ -39,6 +39,8 @@ fetch('./audios.json')
           // 제어센터에서 조작 가능하게 만들기
           navigator.mediaSession.setActionHandler('play', () => audioElement.play());
           navigator.mediaSession.setActionHandler('pause', () => audioElement.pause());
+        } else {
+         alert("mediaSession2");
         }
         // 1. 상태가 1(Metadata만 있음)이거나 에러 상태라면 강제 리셋
           if (audioElement.readyState === 1 || audioElement.readyState === 0) {
