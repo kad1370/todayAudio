@@ -1,4 +1,4 @@
-fetch('audios.json')
+fetch('./audios.json')
   .then(res => res.json())
   .then(data => {
     const list = document.getElementById('list');
