@@ -17,25 +17,27 @@ fetch('./audios.json')
     });
   });
 
-  // 오디오 요소들을 모두 찾아서
-  const audios = document.querySelectorAll('audio');
+ const audios = document.querySelectorAll('audio');
 
-  audios.forEach(audio => {
-    audio.addEventListener('play', () => {
-      alert(audio.readyState);
-      if (audio.readyState === 0) {
-        audio.load();
-      }
+ audios.forEach(audio => {
+   audio.addEventListener('play', () => {
+    alert("state: " + audio.readyState);
+     // 2. 만약 데이터가 전혀 없으면 강제 로드
+     if (audio.readyState === 0) {
+       audio.load();
+     }
 
-      const playPromise = audio.play();
+       audio.play().then(() => {
+           console.log("재생 성공");
+         })
+         .catch(error => {
+           alert("play error: " + error.name);
+         });
+   });
 
-      if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                console.log("재생 성공");
-              })
-              .catch(error => {
-              alert(error.name + ": " + error.message);
-          }
-    });
-  });
+   // 4. 오디오 객체 자체에서 발생하는 에러 감시 (파일 없음, 네트워크 단절 등)
+   audio.onerror = () => {
+     const err = audio.error;
+     alert(`오디오 에러: ${err}`);
+   };
+ });
