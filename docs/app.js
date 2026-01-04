@@ -16,12 +16,18 @@ fetch('./audios.json')
 
       const audioElement = div.querySelector('audio');
 
-      audioElement.addEventListener('play', () => {
+      audioElement.addEventListener('play', async () => {
         alert("현재 상태(readyState):" + audioElement.readyState);
 
-        if (audioElement.readyState === 0) {
-          audioElement.load();
-        }
+        // 1. 상태가 1(Metadata만 있음)이거나 에러 상태라면 강제 리셋
+          if (audioElement.readyState === 1 || audioElement.readyState === 0) {
+            const currentSrc = audioElement.src;
+            audioElement.src = ''; // 소스를 비웠다가
+            audioElement.src = currentSrc; // 다시 넣어서 세션을 완전히 새로 고침
+            audioElement.load();
+
+            await new Promise(resolve => setTimeout(resolve, 200));
+          }
 
         audioElement.play().then(() => {
           console.log("재생 성공");
