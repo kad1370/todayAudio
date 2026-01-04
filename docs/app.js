@@ -20,6 +20,7 @@ fetch('./audios.json')
         alert("현재 상태(readyState):" + audioElement.readyState);
         // MediaSession API 강제 활성화 (아이폰 제어센터용)
         if ('mediaSession' in navigator) {
+        alert("mediaSession");
           navigator.mediaSession.metadata = new MediaSessionMetadata({
             title: audioData.title,     // JSON에 있는 제목
             artist: '오늘의 오디오',      // 아티스트 이름
@@ -44,7 +45,7 @@ fetch('./audios.json')
           }
 
         audioElement.play().then(() => {
-          console.log("재생 성공");
+          alert("재생성공");
         }).catch(error => {
           alert("재생 에러:"+ error.name);
           // iOS PWA 세션 끊김 대응: 소스 재할당
