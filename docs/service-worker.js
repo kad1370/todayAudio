@@ -13,7 +13,6 @@ self.addEventListener('install', e => {
 
 self.addEventListener('fetch', e => {
   // 오디오 파일 요청이면 서비스 워커가 개입하지 않고 통과시킴
-  alert(e.request.url);
   if (e.request.destination === 'audio' || e.request.url.includes('.mp3')) {
     return;
   }
