@@ -15,12 +15,18 @@ fetch('./audios.json')
       list.appendChild(div);
 
       const audioElement = div.querySelector('audio');
-
+      const audioCtx = new AudioContext();
       audioElement.addEventListener('play', async () => {
         alert("현재 상태(readyState):" + audioElement.readyState);
+        alert("audioCtx: " + audioCtx.state);
+        if (audioCtx.state === 'suspended') {
+            await audioCtx.resume();
+          }
+
         // MediaSession API 강제 활성화 (아이폰 제어센터용)
         if ('mediaSession' in navigator) {
         alert("mediaSession");
+
           navigator.mediaSession.metadata = new MediaSessionMetadata({
             title: audioData.title,     // JSON에 있는 제목
             artist: '오늘의 오디오',      // 아티스트 이름
