@@ -18,7 +18,21 @@ fetch('./audios.json')
 
       audioElement.addEventListener('play', async () => {
         alert("현재 상태(readyState):" + audioElement.readyState);
+        // MediaSession API 강제 활성화 (아이폰 제어센터용)
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaSessionMetadata({
+            title: audioData.title,     // JSON에 있는 제목
+            artist: '오늘의 오디오',      // 아티스트 이름
+            album: '오오',         // 앨범 이름
+            artwork: [
+              { src: 'icon-192.png', sizes: '192x192', type: 'image/png' } // 아이콘 경로
+            ]
+          });
 
+          // 제어센터에서 조작 가능하게 만들기
+          navigator.mediaSession.setActionHandler('play', () => audioElement.play());
+          navigator.mediaSession.setActionHandler('pause', () => audioElement.pause());
+        }
         // 1. 상태가 1(Metadata만 있음)이거나 에러 상태라면 강제 리셋
           if (audioElement.readyState === 1 || audioElement.readyState === 0) {
             const currentSrc = audioElement.src;
