@@ -2,19 +2,22 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
-    <title>성공자 오디오</title>
+    <title>오늘의 오디오</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="./manifest.json">
 </head>
 <body>
-<h1>📈 오늘의 성공자 오디오</h1>
-<div id="list"></div>
+<h1>오오</h1>
+<div id="list">
+    <ol>
+       <li>
+           오늘의 오디오 제목
+       </li>
+    </ol>
+</div>
 <script>
   if ('serviceWorker' in navigator) {
-    alert("?");
     navigator.serviceWorker.register('./service-worker.js');
-  } else{
-    alert("!");
   }
 </script>
 <script src="app.js"></script>
