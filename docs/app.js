@@ -3,41 +3,42 @@ fetch('./audios.json')
   .then(data => {
     const list = document.getElementById('list');
 
-    data.forEach(audio => {
+    data.forEach(audioData => {
       const div = document.createElement('div');
       div.className = 'audio-card';
       div.innerHTML = `
-        <h3>${audio.title}</h3>
-        <p>${audio.desc}</p>
-        <audio controls playsinline preload="metadata" src="${audio.url}"></audio>
-        <a href="${audio.url}" download>⬇️ 다운로드</a>
+        <h3>${audioData.title}</h3>
+        <p>${audioData.desc}</p>
+        <audio controls playsinline preload="metadata" src="${audioData.url}"></audio>
+        <a href="${audioData.url}" download>⬇️ 다운로드</a>
       `;
-
       list.appendChild(div);
+
+      const audioElement = div.querySelector('audio');
+
+      audioElement.addEventListener('play', () => {
+        alert("현재 상태(readyState):", audioElement.readyState);
+
+        if (audioElement.readyState === 0) {
+          audioElement.load();
+        }
+
+        audioElement.play().then(() => {
+          console.log("재생 성공");
+        }).catch(error => {
+          alert("재생 에러:", error.name);
+          // iOS PWA 세션 끊김 대응: 소스 재할당
+          if (audioElement.readyState === 0) {
+             audioElement.src = audioData.url;
+             audioElement.load();
+          }
+        });
+      });
+
+      audioElement.onerror = () => {
+        const err = audioElement.error;
+        alert("오디오 에러 상세:", err);
+      };
     });
-  });
-
- const audios = document.querySelectorAll('audio');
-
- audios.forEach(audio => {
-   audio.addEventListener('play', () => {
-    alert("state: " + audio.readyState);
-     // 2. 만약 데이터가 전혀 없으면 강제 로드
-     if (audio.readyState === 0) {
-       audio.load();
-     }
-
-       audio.play().then(() => {
-           console.log("재생 성공");
-         })
-         .catch(error => {
-           alert("play error: " + error.name);
-         });
-   });
-
-   // 4. 오디오 객체 자체에서 발생하는 에러 감시 (파일 없음, 네트워크 단절 등)
-   audio.onerror = () => {
-     const err = audio.error;
-     alert(`오디오 에러: ${err}`);
-   };
- });
+  })
+  .catch(err => console.error("JSON 로드 실패:", err));
